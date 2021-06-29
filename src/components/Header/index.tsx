@@ -5,7 +5,6 @@ export function Header() {
   return (
     <header className={styles.headerContainer}>
       <div className={styles.headerContent}>
-        {/* <img src="/images/logo.svg" alt="csttnews" /> */}
         <div>
           <h1 className={styles.titleWord}>csttnews</h1>
         </div>
