@@ -1,14 +1,9 @@
 import { SignInButton } from '../SignInButton';
 import styles from './styles.module.scss';
 
-import Link from 'next/link';
-
 import { ActiveLink } from '../activeLink';
-import { useRouter } from 'next/router';
 
 export function Header() {
-  const { asPath } = useRouter();
-
   return (
     <header className={styles.headerContainer}>
       <div className={styles.headerContent}>
@@ -20,8 +15,8 @@ export function Header() {
             <a>Home</a>
           </ActiveLink>
 
-          <ActiveLink href='/posts' prefetch activeClassName={styles.active}>
-            <a className={asPath === '/posts' ? styles.active : ''}>Posts</a>
+          <ActiveLink href='/posts' activeClassName={styles.active}>
+            <a>Posts</a>
           </ActiveLink>
         </nav>
 
