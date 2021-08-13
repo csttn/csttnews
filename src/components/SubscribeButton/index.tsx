@@ -13,8 +13,9 @@ export function SubscribeButton() {
       signIn('github');
       return;
     }
+    console.log(session);
 
-    if (session.activeSubscription) {
+    if (session?.activeSubscription) {
       router.push('/posts');
       return;
     }
