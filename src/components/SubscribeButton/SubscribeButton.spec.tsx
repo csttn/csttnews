@@ -1,8 +1,6 @@
-import { render, screen, fireEvent } from '@testing-library/react';
-import { mocked } from 'ts-jest/utils';
-
+import { fireEvent, render, screen } from '@testing-library/react';
 import { signIn } from 'next-auth/client';
-
+import { mocked } from 'ts-jest/utils';
 import { SubscribeButton } from '.';
 
 jest.mock('next-auth/client', () => {
@@ -12,6 +10,15 @@ jest.mock('next-auth/client', () => {
     },
     // mocando função vazia usando jest.fn()
     signIn: jest.fn(),
+  };
+});
+jest.mock('next/router', () => {
+  return {
+    useRouter() {
+      return {
+        push: jest.fn(),
+      };
+    },
   };
 });
 
@@ -34,5 +41,5 @@ describe('SubscribeButton component', () => {
     expect(signInMocked).toHaveBeenCalled();
   });
 
-  it('redirect to posts when user already has a subscription');
+  it('redirect to posts when user already has a subscription', () => {});
 });
