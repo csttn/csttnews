@@ -1,8 +1,8 @@
-import styles from './styles.module.scss';
-import { useSession, signIn } from 'next-auth/client';
+import { signIn, useSession } from 'next-auth/client';
+import { useRouter } from 'next/router';
 import { api } from '../../services/api';
 import { getStripeJS } from '../../services/stripe-js';
-import { useRouter } from 'next/router';
+import styles from './styles.module.scss';
 
 export function SubscribeButton() {
   const [session] = useSession();
@@ -13,7 +13,6 @@ export function SubscribeButton() {
       signIn('github');
       return;
     }
-    console.log(session);
 
     if (session?.activeSubscription) {
       router.push('/posts');

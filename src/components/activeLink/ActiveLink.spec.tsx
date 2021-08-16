@@ -12,7 +12,7 @@ jest.mock('next/router', () => {
 });
 
 describe(`ActiveLink`, () => {
-  test('ActiveLink like renders correctly', () => {
+  it('ActiveLink like renders correctly', () => {
     const { getByText } = render(
       <ActiveLink href='/' activeClassName='active'>
         <a>test</a>
@@ -22,7 +22,7 @@ describe(`ActiveLink`, () => {
     expect(getByText('test')).toBeInTheDocument();
   });
 
-  test('activelink is receiving active class', () => {
+  it('activelink is receiving active class', () => {
     const { getByText } = render(
       <ActiveLink href='/' activeClassName='active'>
         <a>test</a>
