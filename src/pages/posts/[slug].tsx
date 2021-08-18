@@ -36,7 +36,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, params }) =>
   const session = await getSession({ req });
 
   const { slug } = params;
-
+  // AJustar validação para ir a pagina de preview caso nao esteja logado
   if (!session) {
     return {
       redirect: {

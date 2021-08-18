@@ -1,12 +1,15 @@
 import { render, screen } from '@testing-library/react';
-import { getSession } from 'next-auth/client';
+import { getSession, useSession } from 'next-auth/client';
+import { useRouter } from 'next/router';
 import { mocked } from 'ts-jest/utils';
-import Post, { getServerSideProps } from '../../pages/posts/[slug]';
+import Post, { getStaticProps } from '../../pages/posts/preview/[slug]';
 import getPrismicClient from '../../services/prismic';
 
 jest.mock('../../services/prismic');
 
 jest.mock('next-auth/client');
+
+jest.mock('next/router');
 
 const post = {
   slug: 'my-new-post',
@@ -15,30 +18,31 @@ const post = {
   updatedAt: '2018-01-01T00:00:00.000Z',
 };
 
-describe('Post page', () => {
+describe('Post preview page', () => {
   it('renders correctly', () => {
-    render(<Post post={post} />);
+    const useSessionMocked = mocked(useSession);
 
-    expect(screen.getByText('My New Post')).toBeTruthy();
+    useSessionMocked.mockReturnValue([null, false]);
+
+    render(<Post post={post} />);
+    expect(screen.getByText('My New Post')).toBeInTheDocument();
+    expect(screen.getByText('Quer continuar lendo ?')).toBeInTheDocument();
   });
 
-  it('redirect not subcription', async () => {
-    const getSessionMocked = mocked(getSession);
-    getSessionMocked.mockResolvedValueOnce(null);
+  it('redirect user to full post when authenticated', async () => {
+    const useSessionMocked = mocked(useSession);
+    const useRouterMocked = mocked(useRouter);
 
-    const response = await getServerSideProps({
-      params: {
-        slug: 'my-new-post',
-      },
+    const pushMock = jest.fn();
+
+    useSessionMocked.mockReturnValue([{ activeSubscription: { user: 'fake user' } }, false] as any);
+    useRouterMocked.mockReturnValueOnce({
+      push: pushMock,
     } as any);
 
-    expect(response).toEqual(
-      expect.objectContaining({
-        redirect: expect.objectContaining({
-          destination: '/',
-        }),
-      }),
-    );
+    render(<Post post={post} />);
+
+    expect(pushMock).toHaveBeenCalledWith('/posts/my-new-post');
   });
 
   it('loads initial data', async () => {
@@ -59,7 +63,7 @@ describe('Post page', () => {
       activeSubscription: { a: 'test' },
     } as any);
 
-    const response = await getServerSideProps({
+    const response = await getStaticProps({
       params: {
         slug: 'my-new-post',
       },
