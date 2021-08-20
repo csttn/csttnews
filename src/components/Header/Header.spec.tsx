@@ -24,7 +24,7 @@ jest.mock('next/router', () => {
 describe('Header Component', () => {
   it('renders correctly', () => {
     render(<Header />);
-
+    screen.logTestingPlaygroundURL();
     expect(screen.getByText('Home')).toBeInTheDocument();
     expect(screen.getByText('Home')).toHaveClass('active');
 
